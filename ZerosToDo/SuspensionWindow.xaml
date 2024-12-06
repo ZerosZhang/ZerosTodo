@@ -1,0 +1,39 @@
+﻿<Window x:Class="ZerosToDo.SuspensionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ZerosToDo="clr-namespace:ZerosToDo"
+        xmlns:BaseWPFControl ="https://BaseWPFControl"
+        WindowState="Normal" WindowStyle="None"
+        MouseMove="Window_MouseMove" MouseDoubleClick="Window_MouseDoubleClick"
+        Title="SuspensionWindow" Height="450" Width="300" ShowInTaskbar="False"
+        AllowsTransparency="True" Background="{x:Null}">
+    <Window.Resources>
+        <ZerosToDo:BackgroundConverter x:Key="BackgroundConverter" />
+        <ZerosToDo:IsCheckedConverter x:Key="IsCheckedConverter" />
+    </Window.Resources>
+    <Border Background="AliceBlue" Margin="5" CornerRadius="12">
+        <ListBox x:Name="ListBox_TodoList" BaseWPFControl:ControlProperty.Header="待办事项" ItemsSource="{Binding}" IsHitTestVisible="False">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="ZerosToDo:TodoInfo">
+                    <Border CornerRadius="5" Margin="0" Width="240" Padding="3" >
+                        <TextBlock Text="{Binding Title}"
+                                   FontFamily="{StaticResource DefaultFontFamily}" FontSize="20"
+                                   Foreground="{Binding Converter={StaticResource BackgroundConverter}}" />
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+
+            <d:ListBox.ItemsSource>
+                <x:Array Type="{x:Type ZerosToDo:TodoInfo}" >
+                    <ZerosToDo:TodoInfo Title="示例1" StateOnComplete="Todo" />
+                    <ZerosToDo:TodoInfo Title="示例2" StateOnComplete="OnGoing" />
+                    <ZerosToDo:TodoInfo Title="示例3" StateOnComplete="Completed" />
+                    <ZerosToDo:TodoInfo Title="示例4" />
+                </x:Array>
+            </d:ListBox.ItemsSource>
+        </ListBox>
+    </Border>
+
+</Window>
