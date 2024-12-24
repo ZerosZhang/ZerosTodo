@@ -124,6 +124,7 @@ public partial class App : System.Windows.Application
                 string _title = _rows_data["待办事项"]?["value"]?.ToString() ?? throw new Exception();
                 string _on_going = _rows_data["完成进度"]?["value"]?.ToString() ?? throw new Exception();
                 string _deadline = _rows_data["截止时间"]?["value"]?.ToString() ?? throw new Exception();
+                string _is_important = _rows_data["紧急"]?["value"]?.ToString() ?? throw new Exception();
 
                 _list.Add(new TodoInfo()
                 {
@@ -135,7 +136,8 @@ public partial class App : System.Windows.Application
                         "已完成" => StateOnComplete.Completed,
                         _ => StateOnComplete.Todo
                     },
-                    DeadLine = string.IsNullOrEmpty(_deadline) ? default : DateTime.Parse(_deadline)
+                    DeadLine = string.IsNullOrEmpty(_deadline) ? default : DateTime.Parse(_deadline),
+                    IsImportant = bool.Parse(_is_important)
                 });
             }
 
@@ -149,6 +151,7 @@ public partial class App : System.Windows.Application
         }
     }
 
+    [Obsolete("wolai的API暂时不支持外部修改", true)]
     public static async Task SetTodoInfo(TodoInfo _info)
     {
 

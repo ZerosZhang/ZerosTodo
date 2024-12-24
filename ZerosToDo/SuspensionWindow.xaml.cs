@@ -44,12 +44,10 @@ public class BackgroundConverter : IValueConverter
     {
         if (value is TodoInfo _todo_info)
         {
-            bool _due_soon = _todo_info.DeadLine != DateTime.MinValue && (_todo_info.DeadLine - DateTime.Now).Days < 1;
-
             return _todo_info.StateOnComplete switch
             {
-                StateOnComplete.Todo when _due_soon => Brushes.Red,
-                StateOnComplete.OnGoing when _due_soon => Brushes.Red,
+                StateOnComplete.Todo when _todo_info.IsImportant => Brushes.Red,
+                StateOnComplete.OnGoing when _todo_info.IsImportant => Brushes.Red,
                 StateOnComplete.Todo => Brushes.Black,
                 StateOnComplete.OnGoing => Brushes.LimeGreen,
                 StateOnComplete.Completed => Brushes.LightGray,
