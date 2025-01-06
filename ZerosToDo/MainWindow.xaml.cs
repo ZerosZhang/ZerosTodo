@@ -38,9 +38,13 @@ public partial class MainWindow : Window
         };
         _menu.Items.Add(_item_01);
 
-        ToolStripMenuItem _item_02 = new ToolStripMenuItem() { Text = "退出" };
-        _item_02.Click += (_, _) => { System.Windows.Application.Current.Shutdown(); };
+        ToolStripMenuItem _item_02 = new ToolStripMenuItem() { Text = "打开日志图片目录" };
+        _item_02.Click += (_, _) => { Process.Start("explorer.exe", App.Setting.DirectoryOnSaveLogImage); ; };
         _menu.Items.Add(_item_02);
+
+        ToolStripMenuItem _item_99 = new ToolStripMenuItem() { Text = "退出" };
+        _item_99.Click += (_, _) => { System.Windows.Application.Current.Shutdown(); };
+        _menu.Items.Add(_item_99);
 
         BaseFunction.DeleteFileByTime(App.Setting.DirectoryOnSaveLogImage, App.Setting.TimeOnSaveLogImage);
 
