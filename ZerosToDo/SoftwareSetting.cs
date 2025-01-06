@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using BaseTool;
+using CommunityToolkit.Mvvm.ComponentModel;
 using System.IO;
 
 namespace ZerosToDo;
@@ -17,11 +18,23 @@ public partial class SoftwareSetting : ObservableObject
     [ObservableProperty]
     private string m_DataBaseID = string.Empty;
 
+    /// <summary>
+    /// 上次打开的位置
+    /// </summary>
     [ObservableProperty]
     private int m_LastLeft = 0;
 
+    /// <summary>
+    /// 上次打开的位置
+    /// </summary>
     [ObservableProperty]
     private int m_LastTop = 0;
+
+    [ObservableProperty]
+    private string m_DirectoryOnSaveLogImage = Path.Combine(BaseDefine.DirectoryPathOnSaveFile, "LogImage");
+
+    [ObservableProperty]
+    private int m_TimeOnSaveLogImage = 90;
 }
 
 public partial class TodoInfo : ObservableObject

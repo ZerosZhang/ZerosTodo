@@ -10,6 +10,7 @@ using Point = System.Drawing.Point;
 using System.Drawing.Imaging;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
+using System.Diagnostics;
 
 
 namespace ZerosToDo;
@@ -41,8 +42,7 @@ public partial class MainWindow : Window
         _item_02.Click += (_, _) => { System.Windows.Application.Current.Shutdown(); };
         _menu.Items.Add(_item_02);
 
-        string _directory_on_save_log_image = Path.Combine(BaseDefine.DirectoryPathOnSaveFile, "LogImage");
-        BaseFunction.DeleteFileByTime(_directory_on_save_log_image, 90);
+        BaseFunction.DeleteFileByTime(App.Setting.DirectoryOnSaveLogImage, App.Setting.TimeOnSaveLogImage);
 
         Task.Run(async () =>
         {
@@ -54,7 +54,7 @@ public partial class MainWindow : Window
                     for (int i = 0; i < screens.Length; i++)
                     {
                         Bitmap _image = CaptureFullScreen(screens[i].Bounds);
-                        string _directory_path = Path.Combine(_directory_on_save_log_image, $"{DateTime.Now:yyyy-MM-dd}");
+                        string _directory_path = Path.Combine(App.Setting.DirectoryOnSaveLogImage, $"{DateTime.Now:yyyy-MM-dd}");
                         string _file_path = Path.Combine(_directory_path, $"{DateTime.Now:HH-mm-ss}【{i}】.jpg");
 
                         Directory.CreateDirectory(_directory_path);
@@ -134,11 +134,27 @@ public partial class MainWindow : Window
         }
         return bitmap;
     }
+
+    private void Button_OpenDirectoryOnSaveLogImage_Click(object sender, RoutedEventArgs e)
+    {
+        // 打开保存日志图片的目录
+        Process.Start("explorer.exe", App.Setting.DirectoryOnSaveLogImage);
+    }
+
+    private void Button_SelectDirectoryOnSaveLogImage_Click(object sender, RoutedEventArgs e)
+    {
+        // 选择保存日志图片的目录
+        using FolderBrowserDialog _dialog = new FolderBrowserDialog();
+        if (_dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+        {
+            App.Setting.DirectoryOnSaveLogImage = _dialog.SelectedPath;
+        }
+    }
 }
 
 public class JPEGSave
 {
-    private static ImageCodecInfo ImageCodecInfo;
+    private static readonly ImageCodecInfo ImageCodecInfo;
 
     static JPEGSave()
     {
