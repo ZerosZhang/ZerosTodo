@@ -57,7 +57,7 @@ public partial class MainWindow : Window
                     Screen[] screens = Screen.AllScreens;
                     for (int i = 0; i < screens.Length; i++)
                     {
-                        Bitmap _image = CaptureFullScreen(screens[i].Bounds);
+                        using Bitmap _image = CaptureFullScreen(screens[i].Bounds);
                         string _directory_path = Path.Combine(App.Setting.DirectoryOnSaveLogImage, $"{DateTime.Now:yyyy-MM-dd}");
                         string _file_path = Path.Combine(_directory_path, $"{DateTime.Now:HH-mm-ss}【{i}】.jpg");
 
