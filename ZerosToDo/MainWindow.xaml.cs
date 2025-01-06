@@ -5,12 +5,19 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http;
 using System.Windows;
 using System.Net.Http.Headers;
+using System.IO;
+using Point = System.Drawing.Point;
+using System.Drawing.Imaging;
+using Application = System.Windows.Application;
+using MessageBox = System.Windows.Forms.MessageBox;
+
 
 namespace ZerosToDo;
 
 public partial class MainWindow : Window
 {
     readonly NotifyIcon NotifyIcon = new NotifyIcon();
+
     public MainWindow()
     {
         InitializeComponent();
@@ -33,6 +40,36 @@ public partial class MainWindow : Window
         ToolStripMenuItem _item_02 = new ToolStripMenuItem() { Text = "退出" };
         _item_02.Click += (_, _) => { System.Windows.Application.Current.Shutdown(); };
         _menu.Items.Add(_item_02);
+
+        string _directory_on_save_log_image = Path.Combine(BaseDefine.DirectoryPathOnSaveFile, "LogImage");
+        BaseFunction.DeleteFileByTime(_directory_on_save_log_image, 90);
+
+        Task.Run(async () =>
+        {
+            try
+            {
+                while (true)
+                {
+                    Screen[] screens = Screen.AllScreens;
+                    for (int i = 0; i < screens.Length; i++)
+                    {
+                        Bitmap _image = CaptureFullScreen(screens[i].Bounds);
+                        string _directory_path = Path.Combine(_directory_on_save_log_image, $"{DateTime.Now:yyyy-MM-dd}");
+                        string _file_path = Path.Combine(_directory_path, $"{DateTime.Now:HH-mm-ss}【{i}】.jpg");
+
+                        Directory.CreateDirectory(_directory_path);
+                        JPEGSave.SaveBitmapAsJpeg(_image, _file_path, 50);
+                    }
+
+                    await Task.Delay(5000);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Shutdown();
+            }
+        });
     }
     private void NotifyIcon_DoubleClick(object? sender, EventArgs e)
     {
@@ -85,5 +122,51 @@ public partial class MainWindow : Window
     {
         e.Cancel = true;
         Hide();
+    }
+
+
+    public static Bitmap CaptureFullScreen(Rectangle _region)
+    {
+        Bitmap bitmap = new Bitmap(_region.Width, _region.Height);
+        using (Graphics graphics = Graphics.FromImage(bitmap))
+        {
+            graphics.CopyFromScreen(_region.Location, Point.Empty, _region.Size);
+        }
+        return bitmap;
+    }
+}
+
+public class JPEGSave
+{
+    private static ImageCodecInfo ImageCodecInfo;
+
+    static JPEGSave()
+    {
+        ImageCodecInfo = GetJpegCodec() ?? throw new Exception();
+    }
+
+    public static void SaveBitmapAsJpeg(Bitmap bitmap, string filePath, long quality)
+    {
+        // 确保品质在 0-100 之间
+        quality = Math.Max(0, Math.Min(quality, 100));
+        // 创建编码器参数
+        EncoderParameters encoderParameters = new EncoderParameters(1);
+        encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, quality);
+        // 保存为 JPEG 文件
+        bitmap.Save(filePath, ImageCodecInfo, encoderParameters);
+    }
+
+    static ImageCodecInfo? GetJpegCodec()
+    {
+        // 查找 JPEG 编码器
+        ImageCodecInfo[] _codecs_list = ImageCodecInfo.GetImageEncoders();
+        foreach (ImageCodecInfo _codec in _codecs_list)
+        {
+            if (_codec.MimeType == "image/jpeg")
+            {
+                return _codec;
+            }
+        }
+        return null;
     }
 }
