@@ -16,6 +16,12 @@ public partial class SoftwareSetting : ObservableObject
 
     [ObservableProperty]
     private string m_DataBaseID = string.Empty;
+
+    [ObservableProperty]
+    private int m_LastLeft = 0;
+
+    [ObservableProperty]
+    private int m_LastTop = 0;
 }
 
 public partial class TodoInfo : ObservableObject

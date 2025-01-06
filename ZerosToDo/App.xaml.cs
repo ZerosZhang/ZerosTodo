@@ -62,8 +62,8 @@ public partial class App : System.Windows.Application
         SuspensionWindow = new SuspensionWindow
         {
             Topmost = true,
-            Left = SystemParameters.PrimaryScreenWidth + 10,
-            Top = 10
+            Left = Setting.LastLeft,
+            Top = Setting.LastTop,
         };
         SuspensionWindow.Show();
 

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -21,6 +22,9 @@ public partial class SuspensionWindow : Window
         if (e.LeftButton == MouseButtonState.Pressed)
         {
             DragMove();
+
+            App.Setting.LastLeft = (int)Left;
+            App.Setting.LastTop = (int)Top;
         }
     }
 
@@ -35,8 +39,6 @@ public partial class SuspensionWindow : Window
         ShowTodoList(_into);
     }
 }
-
-
 
 public class BackgroundConverter : IValueConverter
 {
