@@ -50,9 +50,10 @@ public partial class MainWindow : Window
 
         Task.Run(async () =>
         {
-            try
+            int _error_count = 0;
+            while (true)
             {
-                while (true)
+                try
                 {
                     Screen[] screens = Screen.AllScreens;
                     for (int i = 0; i < screens.Length; i++)
@@ -65,13 +66,17 @@ public partial class MainWindow : Window
                         JPEGSave.SaveBitmapAsJpeg(_image, _file_path, 50);
                     }
 
+                    _error_count = 0;
                     await Task.Delay(5000);
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                Application.Current.Shutdown();
+                catch (Exception ex)
+                {
+                    _error_count++;
+                    if (_error_count > 3)
+                    {
+                        MessageBox.Show($"截图异常：{ex.Message}");
+                    }
+                }
             }
         });
     }
