@@ -126,19 +126,22 @@ public partial class App : System.Windows.Application
                 string _deadline = _rows_data["截止时间"]?["value"]?.ToString() ?? throw new Exception();
                 string _is_important = _rows_data["紧急"]?["value"]?.ToString() ?? throw new Exception();
 
-                _list.Add(new TodoInfo()
+                if (_on_going is "待完成" or "进行中")
                 {
-                    Title = _title,
-                    StateOnComplete = _on_going switch
+                    _list.Add(new TodoInfo()
                     {
-                        "待完成" => StateOnComplete.Todo,
-                        "进行中" => StateOnComplete.OnGoing,
-                        "已完成" => StateOnComplete.Completed,
-                        _ => StateOnComplete.Todo
-                    },
-                    DeadLine = string.IsNullOrEmpty(_deadline) ? default : DateTime.Parse(_deadline),
-                    IsImportant = bool.Parse(_is_important)
-                });
+                        Title = _title,
+                        StateOnComplete = _on_going switch
+                        {
+                            "待完成" => StateOnComplete.Todo,
+                            "进行中" => StateOnComplete.OnGoing,
+                            "已完成" => StateOnComplete.Completed,
+                            _ => StateOnComplete.Todo
+                        },
+                        DeadLine = string.IsNullOrEmpty(_deadline) ? default : DateTime.Parse(_deadline),
+                        IsImportant = bool.Parse(_is_important)
+                    });
+                }
             }
 
             _info_list = [.. _list];
