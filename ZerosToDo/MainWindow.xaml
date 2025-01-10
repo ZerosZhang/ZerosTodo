@@ -17,54 +17,45 @@
         </ResourceDictionary>
     </Window.Resources>
     <BaseWPFControl:DialogContainer>
-        <StackPanel>
-            <GroupBox Header="Wolai 凭证">
-                <BaseWPFControl:SimplePanel>
+        <TabControl>
+            <TabItem Header="wolai">
+                <GroupBox Header="Wolai 凭证">
+                    <BaseWPFControl:SimplePanel>
+                        <StackPanel Margin="20 0">
+                            <BaseWPFControl:ConfigControl ConfigName="AppID" LeftWidth="120">
+                                <TextBox Width="500" Text="{Binding AppID}" />
+                            </BaseWPFControl:ConfigControl>
+                            <BaseWPFControl:ConfigControl ConfigName="AppSecret" LeftWidth="120">
+                                <TextBox Width="500" Text="{Binding AppSecret}" />
+                            </BaseWPFControl:ConfigControl>
+                            <BaseWPFControl:ConfigControl ConfigName="DataBaseID" LeftWidth="120">
+                                <TextBox Width="500" Text="{Binding DataBaseID}" />
+                            </BaseWPFControl:ConfigControl>
+                            <WrapPanel>
+                                <Button x:Name="Button_RefreshToken" Content="刷新Token" Margin="10" Click="Button_RefreshToken_Click" />
+                                <Button x:Name="Button_RefreshContent" Content="刷新内容" Margin="10" Click="Button_RefreshContent_Click" />
+                                <Button x:Name="Button_SaveConfig" Content="保存" Margin="10" Click="Button_SaveConfig_Click" />
+                            </WrapPanel>
+                        </StackPanel>
+
+                    </BaseWPFControl:SimplePanel>
+                </GroupBox>
+            </TabItem>
+
+            <TabItem Header="日志图片">
+                <GroupBox Header="记录屏幕功能">
                     <StackPanel Margin="20 0">
-                        <BaseWPFControl:ConfigControl ConfigName="AppID" LeftWidth="120">
-                            <TextBox Width="500" Text="{Binding AppID}" />
-                        </BaseWPFControl:ConfigControl>
-                        <BaseWPFControl:ConfigControl ConfigName="AppSecret" LeftWidth="120">
-                            <TextBox Width="500" Text="{Binding AppSecret}" />
-                        </BaseWPFControl:ConfigControl>
-                        <BaseWPFControl:ConfigControl ConfigName="DataBaseID" LeftWidth="120">
-                            <TextBox Width="500" Text="{Binding DataBaseID}" />
-                        </BaseWPFControl:ConfigControl>
-                        <WrapPanel>
-                            <Button x:Name="Button_RefreshToken" Content="刷新Token" Margin="10" Click="Button_RefreshToken_Click" />
-                            <Button x:Name="Button_RefreshContent" Content="刷新内容" Margin="10" Click="Button_RefreshContent_Click" />
-                            <Button x:Name="Button_SaveConfig" Content="保存" Margin="10" Click="Button_SaveConfig_Click" />
-                        </WrapPanel>
-                    </StackPanel>
-
-                </BaseWPFControl:SimplePanel>
-            </GroupBox>
-
-            <GroupBox Header="记录屏幕功能">
-                <StackPanel Margin="20 0">
-
-                    <WrapPanel>
-                        <BaseWPFControl:ConfigControl ConfigName="图片保存路径" LeftWidth="120">
-                            <TextBox Width="400" Text="{Binding DirectoryOnSaveLogImage}" />
-                        </BaseWPFControl:ConfigControl>
-
-                        <Button x:Name="Button_SelectDirectoryOnSaveLogImage" Content="浏览" Margin="10"
-                                Click="Button_SelectDirectoryOnSaveLogImage_Click" />
-                    </WrapPanel>
-
-                    <WrapPanel>
-
                         <BaseWPFControl:ConfigControl ConfigName="保存天数" LeftWidth="120">
                             <TextBox Width="100" Text="{Binding TimeOnSaveLogImage}" />
                         </BaseWPFControl:ConfigControl>
 
-                        <Button x:Name="Button_OpenDirectoryOnSaveLogImage" Content="打开目录" Margin="10"
-                                Click="Button_OpenDirectoryOnSaveLogImage_Click" />
-                    </WrapPanel>
-                </StackPanel>
-            </GroupBox>
-
-        </StackPanel>
+                        <BaseWPFControl:ConfigControl ConfigName="图片保存路径" LeftWidth="120">
+                            <BaseWPFControl:SelectFolderBlock SelectedPath="{Binding DirectoryOnSaveLogImage}" Width="300" />
+                        </BaseWPFControl:ConfigControl>
+                    </StackPanel>
+                </GroupBox>
+            </TabItem>
+        </TabControl>
     </BaseWPFControl:DialogContainer>
 
 </Window>

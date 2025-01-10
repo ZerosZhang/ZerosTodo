@@ -63,7 +63,7 @@ public partial class MainWindow : Window
                         string _file_path = Path.Combine(_directory_path, $"{DateTime.Now:HH-mm-ss}【{i}】.jpg");
 
                         Directory.CreateDirectory(_directory_path);
-                        JPEGSave.SaveBitmapAsJpeg(_image, _file_path, 50);
+                        BaseFunction.SaveBitmapAsJpeg(_image, _file_path, 50);
                     }
 
                     _error_count = 0;
@@ -142,56 +142,5 @@ public partial class MainWindow : Window
             graphics.CopyFromScreen(_region.Location, Point.Empty, _region.Size);
         }
         return bitmap;
-    }
-
-    private void Button_OpenDirectoryOnSaveLogImage_Click(object sender, RoutedEventArgs e)
-    {
-        // 打开保存日志图片的目录
-        Process.Start("explorer.exe", App.Setting.DirectoryOnSaveLogImage);
-    }
-
-    private void Button_SelectDirectoryOnSaveLogImage_Click(object sender, RoutedEventArgs e)
-    {
-        // 选择保存日志图片的目录
-        using FolderBrowserDialog _dialog = new FolderBrowserDialog();
-        if (_dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-        {
-            App.Setting.DirectoryOnSaveLogImage = _dialog.SelectedPath;
-        }
-    }
-}
-
-public class JPEGSave
-{
-    private static readonly ImageCodecInfo ImageCodecInfo;
-
-    static JPEGSave()
-    {
-        ImageCodecInfo = GetJpegCodec() ?? throw new Exception();
-    }
-
-    public static void SaveBitmapAsJpeg(Bitmap bitmap, string filePath, long quality)
-    {
-        // 确保品质在 0-100 之间
-        quality = Math.Max(0, Math.Min(quality, 100));
-        // 创建编码器参数
-        EncoderParameters encoderParameters = new EncoderParameters(1);
-        encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, quality);
-        // 保存为 JPEG 文件
-        bitmap.Save(filePath, ImageCodecInfo, encoderParameters);
-    }
-
-    static ImageCodecInfo? GetJpegCodec()
-    {
-        // 查找 JPEG 编码器
-        ImageCodecInfo[] _codecs_list = ImageCodecInfo.GetImageEncoders();
-        foreach (ImageCodecInfo _codec in _codecs_list)
-        {
-            if (_codec.MimeType == "image/jpeg")
-            {
-                return _codec;
-            }
-        }
-        return null;
     }
 }
