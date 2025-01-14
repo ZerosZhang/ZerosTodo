@@ -37,7 +37,7 @@
                     <ZerosToDo:TodoInfo Title="示例2: 进行中" StateOnComplete="OnGoing" />
                     <ZerosToDo:TodoInfo Title="示例3: 完成（隐藏）" StateOnComplete="Completed" />
                     <ZerosToDo:TodoInfo Title="示例4: 紧急" StateOnComplete="Todo" IsImportant="True" />
-                    <ZerosToDo:TodoInfo Title="示例4: 默认" />
+                    <ZerosToDo:TodoInfo Title="示例5: 默认" />
                 </x:Array>
             </d:ListBox.ItemsSource>
         </ListBox>
