@@ -10,8 +10,14 @@
         Title="SuspensionWindow" Height="450" Width="300" ShowInTaskbar="False"
         AllowsTransparency="True" Background="{x:Null}">
     <Window.Resources>
-        <ZerosToDo:BackgroundConverter x:Key="BackgroundConverter" />
-        <ZerosToDo:IsCheckedConverter x:Key="IsCheckedConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/BaseWPFControl;component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <ZerosToDo:BackgroundConverter x:Key="BackgroundConverter" />
+            <ZerosToDo:IsCheckedConverter x:Key="IsCheckedConverter" />
+        </ResourceDictionary>
     </Window.Resources>
     <Border Background="AliceBlue" Margin="5" CornerRadius="12">
         <ListBox x:Name="ListBox_TodoList" BaseWPFControl:ControlProperty.Header="待办事项" ItemsSource="{Binding}" IsHitTestVisible="False">

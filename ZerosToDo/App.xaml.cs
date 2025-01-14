@@ -24,7 +24,6 @@ public partial class App : System.Windows.Application
 
     public App()
     {
-        InitializeComponent();
         Startup += App_Startup;
         Exit += App_Exit;
         DispatcherUnhandledException += App_DispatcherUnhandledException;
@@ -45,9 +44,6 @@ public partial class App : System.Windows.Application
             Shutdown();
             return;
         }
-
-        // 注册日志函数
-        BaseLogManager.Register_SaveLogToFile();
 
         // 创建保存运行数据的文件夹
         Directory.CreateDirectory(BaseDefine.DirectoryPathOnSaveLog);

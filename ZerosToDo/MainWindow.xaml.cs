@@ -30,17 +30,9 @@ public partial class MainWindow : Window
         ContextMenuStrip _menu = new ContextMenuStrip();
         NotifyIcon.ContextMenuStrip = _menu;
 
-        ToolStripMenuItem _item_01 = new ToolStripMenuItem() { Text = "刷新数据" };
-        _item_01.Click += async (_, _) =>
-        {
-            TodoInfo[] _info = await App.GetTodoInfo();
-            App.SuspensionWindow.ShowTodoList(_info);
-        };
+        ToolStripMenuItem _item_01 = new ToolStripMenuItem() { Text = "打开日志图片目录" };
+        _item_01.Click += (_, _) => { Process.Start("explorer.exe", App.Setting.DirectoryOnSaveLogImage); ; };
         _menu.Items.Add(_item_01);
-
-        ToolStripMenuItem _item_02 = new ToolStripMenuItem() { Text = "打开日志图片目录" };
-        _item_02.Click += (_, _) => { Process.Start("explorer.exe", App.Setting.DirectoryOnSaveLogImage); ; };
-        _menu.Items.Add(_item_02);
 
         ToolStripMenuItem _item_99 = new ToolStripMenuItem() { Text = "退出" };
         _item_99.Click += (_, _) => { Application.Current.Shutdown(); };
