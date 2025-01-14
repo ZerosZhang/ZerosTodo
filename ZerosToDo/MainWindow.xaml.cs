@@ -7,10 +7,10 @@ using System.Windows;
 using System.Net.Http.Headers;
 using System.IO;
 using Point = System.Drawing.Point;
-using System.Drawing.Imaging;
-using Application = System.Windows.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
+using Application = System.Windows.Application;
 using System.Diagnostics;
+using System.ComponentModel;
 
 
 namespace ZerosToDo;
@@ -43,14 +43,13 @@ public partial class MainWindow : Window
         _menu.Items.Add(_item_02);
 
         ToolStripMenuItem _item_99 = new ToolStripMenuItem() { Text = "退出" };
-        _item_99.Click += (_, _) => { System.Windows.Application.Current.Shutdown(); };
+        _item_99.Click += (_, _) => { Application.Current.Shutdown(); };
         _menu.Items.Add(_item_99);
 
         BaseFunction.DeleteFileByTime(App.Setting.DirectoryOnSaveLogImage, App.Setting.TimeOnSaveLogImage);
 
         Task.Run(async () =>
         {
-            int _error_count = 0;
             while (true)
             {
                 try
@@ -65,18 +64,18 @@ public partial class MainWindow : Window
                         Directory.CreateDirectory(_directory_path);
                         BaseFunction.SaveBitmapAsJpeg(_image, _file_path, 50);
                     }
-
-                    _error_count = 0;
-                    await Task.Delay(5000);
+                }
+                catch(Win32Exception ex) when (ex.NativeErrorCode is 6)
+                {
+                    // 句柄无效异常：不具备截图条件，在以下情况下会发生：
+                    // - 1. Ctrl+Alt+Del 界面
+                    // - 2. 以管理员运行某个程序后弹出确认窗口时
                 }
                 catch (Exception ex)
                 {
-                    _error_count++;
-                    if (_error_count > 3)
-                    {
-                        MessageBox.Show($"截图异常：{ex.Message}");
-                    }
+                    MessageBox.Show($"截图异常：{ex.Message}{Environment.NewLine}{ex}");
                 }
+                await Task.Delay(5000);
             }
         });
     }
