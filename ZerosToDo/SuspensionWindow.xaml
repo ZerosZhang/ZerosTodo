@@ -33,10 +33,11 @@
 
             <d:ListBox.ItemsSource>
                 <x:Array Type="{x:Type ZerosToDo:TodoInfo}" >
-                    <ZerosToDo:TodoInfo Title="示例1" StateOnComplete="Todo" />
-                    <ZerosToDo:TodoInfo Title="示例2" StateOnComplete="OnGoing" />
-                    <ZerosToDo:TodoInfo Title="示例3" StateOnComplete="Completed" />
-                    <ZerosToDo:TodoInfo Title="示例4" />
+                    <ZerosToDo:TodoInfo Title="示例1: 待办" StateOnComplete="Todo" />
+                    <ZerosToDo:TodoInfo Title="示例2: 进行中" StateOnComplete="OnGoing" />
+                    <ZerosToDo:TodoInfo Title="示例3: 完成（隐藏）" StateOnComplete="Completed" />
+                    <ZerosToDo:TodoInfo Title="示例4: 紧急" StateOnComplete="Todo" IsImportant="True" />
+                    <ZerosToDo:TodoInfo Title="示例4: 默认" />
                 </x:Array>
             </d:ListBox.ItemsSource>
         </ListBox>
