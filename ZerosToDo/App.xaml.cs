@@ -54,7 +54,7 @@ public partial class App : System.Windows.Application
         // 程序实例
         Setting = BaseFunction.LoadConfig_Json<SoftwareSetting>(BaseDefine.FilePathOnSaveSoftwareSetting) ?? new SoftwareSetting();
 
-        MainWindow = new MainWindow() { DataContext = Setting };
+        MainWindow = new MainWindow();
         SuspensionWindow = new SuspensionWindow
         {
             Topmost = true,

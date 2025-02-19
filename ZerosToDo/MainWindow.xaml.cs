@@ -22,6 +22,9 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        DataContext = App.Setting;
+
         NotifyIcon.BalloonTipText = "设置界面已隐藏";
         NotifyIcon.Icon = new Icon("ZerosToDo.ico");
         NotifyIcon.Visible = true;
