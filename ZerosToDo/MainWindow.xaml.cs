@@ -11,6 +11,8 @@ using MessageBox = System.Windows.Forms.MessageBox;
 using Application = System.Windows.Application;
 using System.Diagnostics;
 using System.ComponentModel;
+using Microsoft.Win32;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 
 namespace ZerosToDo;
@@ -34,8 +36,16 @@ public partial class MainWindow : Window
         NotifyIcon.ContextMenuStrip = _menu;
 
         ToolStripMenuItem _item_01 = new ToolStripMenuItem() { Text = "打开日志图片目录" };
-        _item_01.Click += (_, _) => { Process.Start("explorer.exe", App.Setting.DirectoryOnSaveLogImage); ; };
+        _item_01.Click += (_, _) => { Process.Start("explorer.exe", App.Setting.DirectoryOnSaveLogImage);};
         _menu.Items.Add(_item_01);
+
+        ToolStripMenuItem _item_02 = new ToolStripMenuItem() { Text = "开始朗读" };
+        _item_02.Click += (_, _) => { TextSpeech.ScanFile(App.Setting.DirectoryOnSaveTxtFile); TextSpeech.SkipLine(0); TextSpeech.Start(); };
+        _menu.Items.Add(_item_02);
+
+        ToolStripMenuItem _item_03 = new ToolStripMenuItem() { Text = "停止朗读" };
+        _item_03.Click += (_, _) => { TextSpeech.Pause(); };
+        _menu.Items.Add(_item_03);
 
         ToolStripMenuItem _item_99 = new ToolStripMenuItem() { Text = "退出" };
         _item_99.Click += (_, _) => { Application.Current.Shutdown(); };
@@ -136,5 +146,28 @@ public partial class MainWindow : Window
             graphics.CopyFromScreen(_region.Location, Point.Empty, _region.Size);
         }
         return bitmap;
+    }
+
+    private void NumericBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+    {
+        
+    }
+
+    private void Button_UpLoadFile_Click(object sender, RoutedEventArgs e)
+    {
+        OpenFileDialog _dialog = new OpenFileDialog()
+        {
+            Multiselect = false,
+            Filter = "文本文件|*.txt",
+        };
+
+        if (_dialog.ShowDialog() is true)
+        {
+            string _new_path = Path.Combine(App.Setting.DirectoryOnSaveTxtFile, Path.GetFileName(_dialog.FileName));
+            Directory.CreateDirectory(App.Setting.DirectoryOnSaveTxtFile);
+            File.Copy(_dialog.FileName, _new_path, true);
+            App.Setting.TxtFileNameList.Add(Path.GetFileNameWithoutExtension(_new_path));
+            TextSpeech.CurrentFilePath = _new_path;
+        }
     }
 }

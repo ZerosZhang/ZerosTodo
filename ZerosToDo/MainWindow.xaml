@@ -54,6 +54,18 @@
                     </StackPanel>
                 </GroupBox>
             </TabItem>
+
+            <TabItem Header="朗读">
+                <DockPanel>
+                    <Button x:Name="Button_UpLoadFile" Content="上传新文件" DockPanel.Dock="Top" Click="Button_UpLoadFile_Click" />
+
+                    <BaseWPFControl:NumericBox MinValue="-10" MaxValue="10" Interval="1" DockPanel.Dock="Top"
+                                               ValueChanged="NumericBox_ValueChanged" />
+
+                    <ListBox ItemsSource="{Binding TxtFileNameList}" />
+                </DockPanel>
+
+            </TabItem>
         </TabControl>
     </BaseWPFControl:DialogContainer>
 

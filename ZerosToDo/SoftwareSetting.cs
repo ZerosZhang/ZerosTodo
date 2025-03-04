@@ -1,5 +1,6 @@
 ﻿using BaseTool;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace ZerosToDo;
@@ -35,6 +36,12 @@ public partial class SoftwareSetting : ObservableObject
 
     [ObservableProperty]
     private int m_TimeOnSaveLogImage = 90;
+
+    [ObservableProperty]
+    private string m_DirectoryOnSaveTxtFile = Path.Combine(BaseDefine.DirectoryPathOnSaveFile, "TxTFile");
+
+    [ObservableProperty]
+    private ObservableCollection<string> m_TxtFileNameList = [];
 }
 
 public partial class TodoInfo : ObservableObject
