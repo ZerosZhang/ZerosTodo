@@ -53,16 +53,6 @@ public partial class App : System.Windows.Application
         // 程序实例
         Setting = BaseFunction.LoadConfig_Json<SoftwareSetting>(BaseDefine.FilePathOnSaveSoftwareSetting) ?? new SoftwareSetting();
 
-        MainWindow = new MainWindow();
-        SuspensionWindow = new SuspensionWindow
-        {
-            Topmost = true,
-            Left = Setting.LastLeft,
-            Top = Setting.LastTop,
-        };
-        SuspensionWindow.Show();
-
-
         WolaiDataBase.InitializeTool();
         SuspensionWindow.ShowTodoList(await WolaiDataBase.GetTodoInfo());
 
@@ -71,6 +61,15 @@ public partial class App : System.Windows.Application
 
         TextSpeech.InitializeTool();
         TextSpeech.ChangeFile();
+
+        MainWindow = new MainWindow();
+        SuspensionWindow = new SuspensionWindow
+        {
+            Topmost = true,
+            Left = Setting.LastLeft,
+            Top = Setting.LastTop,
+        };
+        SuspensionWindow.Show();
     }
 
     /// <summary>
