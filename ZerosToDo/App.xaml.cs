@@ -1,10 +1,6 @@
 ﻿using BaseTool;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Windows;
 using System.Windows.Threading;
 using ZerosToDo.Tools;
