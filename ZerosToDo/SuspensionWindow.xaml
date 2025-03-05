@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ZerosToDo="clr-namespace:ZerosToDo"
+        xmlns:Tools="clr-namespace:ZerosToDo.Tools"
         xmlns:BaseWPFControl ="https://BaseWPFControl"
         WindowState="Normal" WindowStyle="None"
         MouseMove="Window_MouseMove" MouseDoubleClick="Window_MouseDoubleClick"
@@ -22,7 +23,7 @@
     <Border Background="AliceBlue" Margin="5" CornerRadius="12">
         <ListBox x:Name="ListBox_TodoList" BaseWPFControl:ControlProperty.Header="待办事项" ItemsSource="{Binding}" IsHitTestVisible="False">
             <ListBox.ItemTemplate>
-                <DataTemplate DataType="ZerosToDo:TodoInfo">
+                <DataTemplate DataType="Tools:TodoInfo">
                     <Border CornerRadius="5" Margin="0" Width="240" Padding="3" >
                         <TextBlock Text="{Binding Title}"
                                    FontFamily="{StaticResource DefaultFontFamily}" FontSize="20"
@@ -32,12 +33,12 @@
             </ListBox.ItemTemplate>
 
             <d:ListBox.ItemsSource>
-                <x:Array Type="{x:Type ZerosToDo:TodoInfo}" >
-                    <ZerosToDo:TodoInfo Title="示例1: 待办" StateOnComplete="Todo" />
-                    <ZerosToDo:TodoInfo Title="示例2: 进行中" StateOnComplete="OnGoing" />
-                    <ZerosToDo:TodoInfo Title="示例3: 完成（隐藏）" StateOnComplete="Completed" />
-                    <ZerosToDo:TodoInfo Title="示例4: 紧急" StateOnComplete="Todo" IsImportant="True" />
-                    <ZerosToDo:TodoInfo Title="示例5: 默认" />
+                <x:Array Type="{x:Type Tools:TodoInfo}" >
+                    <Tools:TodoInfo Title="示例1: 待办" StateOnComplete="Todo" />
+                    <Tools:TodoInfo Title="示例2: 进行中" StateOnComplete="OnGoing" />
+                    <Tools:TodoInfo Title="示例3: 完成（隐藏）" StateOnComplete="Completed" />
+                    <Tools:TodoInfo Title="示例4: 紧急" StateOnComplete="Todo" IsImportant="True" />
+                    <Tools:TodoInfo Title="示例5: 默认" />
                 </x:Array>
             </d:ListBox.ItemsSource>
         </ListBox>

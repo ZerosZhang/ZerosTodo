@@ -1,18 +1,16 @@
 ﻿using BaseTool;
 using BaseWPFControl.ToolDialog;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
 using System.Windows;
-using System.Net.Http.Headers;
 using System.IO;
-using Point = System.Drawing.Point;
-using MessageBox = System.Windows.Forms.MessageBox;
 using Application = System.Windows.Application;
 using System.Diagnostics;
-using System.ComponentModel;
-using Microsoft.Win32;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using ZerosToDo.Tools;
+using System.Windows.Controls;
+using System.Globalization;
+using System.Windows.Data;
+using Binding = System.Windows.Data.Binding;
+using ListBox = System.Windows.Controls.ListBox;
 
 
 namespace ZerosToDo;
@@ -36,54 +34,22 @@ public partial class MainWindow : Window
         NotifyIcon.ContextMenuStrip = _menu;
 
         ToolStripMenuItem _item_01 = new ToolStripMenuItem() { Text = "打开日志图片目录" };
-        _item_01.Click += (_, _) => { Process.Start("explorer.exe", App.Setting.DirectoryOnSaveLogImage);};
+        _item_01.Click += (_, _) => { Process.Start("explorer.exe", App.Setting.DirectoryOnSaveLogImage); };
         _menu.Items.Add(_item_01);
 
         ToolStripMenuItem _item_02 = new ToolStripMenuItem() { Text = "开始朗读" };
-        _item_02.Click += (_, _) => { TextSpeech.ScanFile(App.Setting.DirectoryOnSaveTxtFile); TextSpeech.SkipLine(0); TextSpeech.Start(); };
+        _item_02.Click += (_, _) => { TextSpeech.Start(); };
         _menu.Items.Add(_item_02);
 
         ToolStripMenuItem _item_03 = new ToolStripMenuItem() { Text = "停止朗读" };
-        _item_03.Click += (_, _) => { TextSpeech.Pause(); };
+        _item_03.Click += (_, _) => { TextSpeech.Stop(); };
         _menu.Items.Add(_item_03);
 
         ToolStripMenuItem _item_99 = new ToolStripMenuItem() { Text = "退出" };
         _item_99.Click += (_, _) => { Application.Current.Shutdown(); };
         _menu.Items.Add(_item_99);
-
-        BaseFunction.DeleteFileByTime(App.Setting.DirectoryOnSaveLogImage, App.Setting.TimeOnSaveLogImage);
-
-        Task.Run(async () =>
-        {
-            while (true)
-            {
-                try
-                {
-                    Screen[] screens = Screen.AllScreens;
-                    for (int i = 0; i < screens.Length; i++)
-                    {
-                        using Bitmap _image = CaptureFullScreen(screens[i].Bounds);
-                        string _directory_path = Path.Combine(App.Setting.DirectoryOnSaveLogImage, $"{DateTime.Now:yyyy-MM-dd}");
-                        string _file_path = Path.Combine(_directory_path, $"{DateTime.Now:HH-mm-ss}【{i}】.jpg");
-
-                        Directory.CreateDirectory(_directory_path);
-                        BaseFunction.SaveBitmapAsJpeg(_image, _file_path, 50);
-                    }
-                }
-                catch(Win32Exception ex) when (ex.NativeErrorCode is 6)
-                {
-                    // 句柄无效异常：不具备截图条件，在以下情况下会发生：
-                    // - 1. Ctrl+Alt+Del 界面
-                    // - 2. 以管理员运行某个程序后弹出确认窗口时
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"截图异常：{ex.Message}{Environment.NewLine}{ex}");
-                }
-                await Task.Delay(5000);
-            }
-        });
     }
+
     private void NotifyIcon_DoubleClick(object? sender, EventArgs e)
     {
         Show();
@@ -92,36 +58,19 @@ public partial class MainWindow : Window
     private async void Button_RefreshToken_Click(object sender, RoutedEventArgs e)
     {
         _ = LoadingCancelDialog.Show("请等待...", BaseAction.TokenSource);
-        // ! 提供两种方式 Token 不存在时创建，Token 存在时刷新
-        if (string.IsNullOrEmpty(App.Setting.AppToken))
-        {
-            string _json_data = JsonConvert.SerializeObject(new { appId = App.Setting.AppID, appSecret = App.Setting.AppSecret });
-            StringContent _content = new StringContent(_json_data);
-            HttpResponseMessage _response = await App.WolaiClient.PostAsync("https://openapi.wolai.com/v1/token", _content, BaseAction.Token);
-            _response.EnsureSuccessStatusCode();
-            string _json_string = await _response.Content.ReadAsStringAsync(BaseAction.Token);
-            JObject json_object = JObject.Parse(_json_string);
-            App.Setting.AppToken = json_object["data"]?["app_token"]?.ToString() ?? throw new Exception("回复异常");
-            App.WolaiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(App.Setting.AppToken);
-        }
-        else
-        {
-            string _json_data = JsonConvert.SerializeObject(new { appId = App.Setting.AppID, appToken = App.Setting.AppToken });
-            StringContent _content = new StringContent(_json_data);
-            HttpResponseMessage _response = await App.WolaiClient.PutAsync("https://openapi.wolai.com/v1/token", _content, BaseAction.Token);
-            _response.EnsureSuccessStatusCode();
-            string _json_string = await _response.Content.ReadAsStringAsync(BaseAction.Token);
-            JObject json_object = JObject.Parse(_json_string);
-            App.Setting.AppToken = json_object["data"]?["app_token"]?.ToString() ?? throw new Exception("回复异常");
-            App.WolaiClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(App.Setting.AppToken);
-        }
+        uint _ret = await WolaiDataBase.GetToken();
         LoadingCancelDialog.Close();
+
+        if (_ret is not BaseAction.ResultOK)
+        {
+            await NotificationDialog.Show("获取 Token 失败");
+        }
     }
 
     private async void Button_RefreshContent_Click(object sender, RoutedEventArgs e)
     {
         _ = LoadingCancelDialog.Show("请等待...", BaseAction.TokenSource);
-        TodoInfo[] _info = await App.GetTodoInfo();
+        TodoInfo[] _info = await WolaiDataBase.GetTodoInfo();
         App.SuspensionWindow.ShowTodoList(_info);
         LoadingCancelDialog.Close();
     }
@@ -138,20 +87,6 @@ public partial class MainWindow : Window
     }
 
 
-    public static Bitmap CaptureFullScreen(Rectangle _region)
-    {
-        Bitmap bitmap = new Bitmap(_region.Width, _region.Height);
-        using (Graphics graphics = Graphics.FromImage(bitmap))
-        {
-            graphics.CopyFromScreen(_region.Location, Point.Empty, _region.Size);
-        }
-        return bitmap;
-    }
-
-    private void NumericBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
-    {
-        
-    }
 
     private void Button_UpLoadFile_Click(object sender, RoutedEventArgs e)
     {
@@ -166,8 +101,63 @@ public partial class MainWindow : Window
             string _new_path = Path.Combine(App.Setting.DirectoryOnSaveTxtFile, Path.GetFileName(_dialog.FileName));
             Directory.CreateDirectory(App.Setting.DirectoryOnSaveTxtFile);
             File.Copy(_dialog.FileName, _new_path, true);
-            App.Setting.TxtFileNameList.Add(Path.GetFileNameWithoutExtension(_new_path));
-            TextSpeech.CurrentFilePath = _new_path;
+            App.Setting.TxtFileNameList.Add(new FileMetaData()
+            {
+                FileName = Path.GetFileNameWithoutExtension(_new_path),
+                FilePath = _new_path,
+                LineCount = 0
+            });
         }
+    }
+
+    private void NumericBox_ValueChanged(object sender, RoutedPropertyChangedEventArgs<decimal> e)
+    {
+        TextSpeech.InitializeTool();
+    }
+
+    private void Button_ResumeFile_Click(object sender, RoutedEventArgs e)
+    {
+        TextSpeech.Start();
+    }
+
+    private void Button_PauseFile_Click(object sender, RoutedEventArgs e)
+    {
+        TextSpeech.Stop();
+    }
+
+    private void Button_CancelFile_Click(object sender, RoutedEventArgs e)
+    {
+        TextSpeech.Cancel();
+    }
+
+    private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (IsActive)
+        {
+            TextSpeech.Cancel();
+            TextSpeech.ChangeFile();
+            TextSpeech.Start();
+        }
+    }
+}
+
+public class GuidConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is Guid _id)
+        {
+            return App.Setting.TxtFileNameList.FirstOrDefault(_file_meta => _file_meta.ID == _id) ?? DependencyProperty.UnsetValue;
+        }
+        return DependencyProperty.UnsetValue;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is FileMetaData _file_meta)
+        {
+            return _file_meta.ID;
+        }
+        return Binding.DoNothing;
     }
 }

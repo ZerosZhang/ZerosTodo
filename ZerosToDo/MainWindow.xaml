@@ -13,6 +13,9 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/BaseWPFControl;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <ZerosToDo:GuidConverter x:Key="GuidConverter" />
+
         </ResourceDictionary>
     </Window.Resources>
     <BaseWPFControl:DialogContainer>
@@ -57,12 +60,39 @@
 
             <TabItem Header="朗读">
                 <DockPanel>
-                    <Button x:Name="Button_UpLoadFile" Content="上传新文件" DockPanel.Dock="Top" Click="Button_UpLoadFile_Click" />
 
-                    <BaseWPFControl:NumericBox MinValue="-10" MaxValue="10" Interval="1" DockPanel.Dock="Top"
-                                               ValueChanged="NumericBox_ValueChanged" />
+                    <WrapPanel DockPanel.Dock="Top">
+                        <Button x:Name="Button_UpLoadFile" Content="上传新文件"
+                                DockPanel.Dock="Top" Margin="10"
+                                Click="Button_UpLoadFile_Click" />
 
-                    <ListBox ItemsSource="{Binding TxtFileNameList}" />
+                        <Button x:Name="Button_ResumeFile" Content="朗读"
+                                DockPanel.Dock="Top" Margin="10"
+                                Click="Button_ResumeFile_Click" />
+
+                        <Button x:Name="Button_PauseFile" Content="暂停"
+                                DockPanel.Dock="Top" Margin="10"
+                                Click="Button_PauseFile_Click" />
+
+                        <Button x:Name="Button_CancelFile" Content="取消所有"
+                                DockPanel.Dock="Top" Margin="10"
+                                Click="Button_CancelFile_Click" />
+                    </WrapPanel>
+
+                    <BaseWPFControl:ConfigControl ConfigName="语速：" DockPanel.Dock="Top" Margin="5">
+                        <BaseWPFControl:NumericBox DockPanel.Dock="Top" MinValue="-10" MaxValue="10" Interval="1"
+                                                   Value="{Binding SpeechRate}" ValueChanged="NumericBox_ValueChanged" />
+                    </BaseWPFControl:ConfigControl>
+
+                    <ListBox ItemsSource="{Binding TxtFileNameList}"
+                             SelectedValue="{Binding LastFileID, Converter={StaticResource GuidConverter}}"
+                             SelectionChanged="ListBox_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding FileName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </DockPanel>
 
             </TabItem>

@@ -2,7 +2,9 @@
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using ZerosToDo.Tools;
 using Brushes = System.Windows.Media.Brushes;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace ZerosToDo;
 
@@ -16,7 +18,7 @@ public partial class SuspensionWindow : Window
         InitializeComponent();
     }
 
-    private void Window_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+    private void Window_MouseMove(object sender, MouseEventArgs e)
     {
         if (e.LeftButton == MouseButtonState.Pressed)
         {
@@ -34,7 +36,7 @@ public partial class SuspensionWindow : Window
 
     private async void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        TodoInfo[] _into = await App.GetTodoInfo();
+        TodoInfo[] _into = await WolaiDataBase.GetTodoInfo();
         ShowTodoList(_into);
     }
 }
