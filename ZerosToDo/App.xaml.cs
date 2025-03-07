@@ -50,7 +50,6 @@ public partial class App : System.Windows.Application
         Setting = BaseFunction.LoadConfig_Json<SoftwareSetting>(BaseDefine.FilePathOnSaveSoftwareSetting) ?? new SoftwareSetting();
 
         WolaiDataBase.InitializeTool();
-        SuspensionWindow.ShowTodoList(await WolaiDataBase.GetTodoInfo());
 
         AutoScreenShot.InitializeTool();
         AutoScreenShot.DoLoopScreenShotAction();
@@ -65,6 +64,7 @@ public partial class App : System.Windows.Application
             Left = Setting.LastLeft,
             Top = Setting.LastTop,
         };
+        SuspensionWindow.ShowTodoList(await WolaiDataBase.GetTodoInfo());
         SuspensionWindow.Show();
     }
 
