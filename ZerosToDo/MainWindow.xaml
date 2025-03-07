@@ -79,10 +79,21 @@
                                 Click="Button_CancelFile_Click" />
                     </WrapPanel>
 
-                    <BaseWPFControl:ConfigControl ConfigName="语速：" DockPanel.Dock="Top" Margin="5">
-                        <BaseWPFControl:NumericBox DockPanel.Dock="Top" MinValue="-10" MaxValue="10" Interval="1"
-                                                   Value="{Binding SpeechRate}" ValueChanged="NumericBox_ValueChanged" />
-                    </BaseWPFControl:ConfigControl>
+                    <WrapPanel DockPanel.Dock="Top">
+                        <BaseWPFControl:ConfigControl ConfigName="语速：" Margin="5">
+                            <BaseWPFControl:NumericBox DockPanel.Dock="Top" MinValue="-10" MaxValue="10" Interval="1"
+                                                       Value="{Binding SpeechRate}" ValueChanged="NumericBox_ValueChanged" />
+                        </BaseWPFControl:ConfigControl>
+
+                        <BaseWPFControl:ConfigControl ConfigName="从此处开始读：" Margin="5">
+                            <TextBox x:Name="TextBox_ReadFrom" Width="200" />
+                        </BaseWPFControl:ConfigControl>
+
+                        <Button x:Name="Button_ReadFrom" Content="跳转" Margin="10"
+                                Click="Button_ReadFrom_Click" />
+                    </WrapPanel>
+
+
 
                     <ListBox ItemsSource="{Binding TxtFileNameList}"
                              SelectedValue="{Binding LastFileID, Converter={StaticResource GuidConverter}}"

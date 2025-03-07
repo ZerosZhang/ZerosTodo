@@ -57,6 +57,20 @@ public static class TextSpeech
         return BaseAction.ResultOK;
     }
 
+    public static uint ReadFrom(string _text)
+    {
+        FileMetaData? _file = App.Setting.TxtFileNameList.FirstOrDefault(_file_status => _file_status.ID == App.Setting.LastFileID);
+        if (_file is null) { return BaseAction.ResultError; }
+        if (_file.FileExists is false) { return BaseAction.ResultError; }
+
+        // 跳过已经朗读的行
+        List<string> _todo_list = [.. File.ReadLines(_file.FilePath)];
+
+       int _current_index = _todo_list.FindIndex(0, _line => _line.Contains( _text));
+        _file.LineCount = _current_index;
+        return BaseAction.ResultOK;
+    }
+
     public static void Start() => Speech.Resume();
 
     public static void Stop() => Speech.Pause();

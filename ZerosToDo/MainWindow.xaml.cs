@@ -139,6 +139,14 @@ public partial class MainWindow : Window
             TextSpeech.Start();
         }
     }
+
+    private void Button_ReadFrom_Click(object sender, RoutedEventArgs e)
+    {
+        TextSpeech.Cancel();
+        TextSpeech.ReadFrom(TextBox_ReadFrom.Text);
+        TextSpeech.ChangeFile();
+        TextSpeech.Start();
+    }
 }
 
 public class GuidConverter : IValueConverter
