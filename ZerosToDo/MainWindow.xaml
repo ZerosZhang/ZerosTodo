@@ -16,17 +16,17 @@
             <TabItem Header="wolai">
                 <GroupBox Header="Wolai 凭证">
                     <BaseWPFControl:SimplePanel>
-                        <StackPanel Margin="20 0">
-                            <BaseWPFControl:ConfigControl Header="AppID" LeftWidth="120">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <BaseWPFControl:ConfigControl Header="AppID" LeftWidth="120" Margin="5">
                                 <TextBox Width="500" Text="{Binding AppID}" />
                             </BaseWPFControl:ConfigControl>
-                            <BaseWPFControl:ConfigControl Header="AppSecret" LeftWidth="120">
+                            <BaseWPFControl:ConfigControl Header="AppSecret" LeftWidth="120" Margin="5">
                                 <TextBox Width="500" Text="{Binding AppSecret}" />
                             </BaseWPFControl:ConfigControl>
-                            <BaseWPFControl:ConfigControl Header="DataBaseID" LeftWidth="120">
+                            <BaseWPFControl:ConfigControl Header="DataBaseID" LeftWidth="120" Margin="5">
                                 <TextBox Width="500" Text="{Binding DataBaseID}" />
                             </BaseWPFControl:ConfigControl>
-                            <WrapPanel>
+                            <WrapPanel HorizontalAlignment="Center">
                                 <Button x:Name="Button_RefreshToken" Content="刷新Token" Margin="10" Click="Button_RefreshToken_Click" />
                                 <Button x:Name="Button_RefreshContent" Content="刷新内容" Margin="10" Click="Button_RefreshContent_Click" />
                                 <Button x:Name="Button_SaveConfig" Content="保存" Margin="10" Click="Button_SaveConfig_Click" />
@@ -39,12 +39,12 @@
 
             <TabItem Header="日志图片">
                 <GroupBox Header="记录屏幕功能">
-                    <StackPanel Margin="20 0">
-                        <BaseWPFControl:ConfigControl Header="保存天数" LeftWidth="120">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <BaseWPFControl:ConfigControl Header="保存天数" LeftWidth="120" Margin="5">
                             <TextBox Width="100" Text="{Binding TimeOnSaveLogImage}" />
                         </BaseWPFControl:ConfigControl>
 
-                        <BaseWPFControl:ConfigControl Header="图片保存路径" LeftWidth="120">
+                        <BaseWPFControl:ConfigControl Header="图片保存路径" LeftWidth="120" Margin="5">
                             <BaseWPFControl:SelectFolderBox Text="{Binding DirectoryOnSaveLogImage}" Width="300" />
                         </BaseWPFControl:ConfigControl>
                     </StackPanel>
@@ -54,7 +54,7 @@
             <TabItem Header="朗读">
                 <DockPanel>
 
-                    <WrapPanel DockPanel.Dock="Top">
+                    <WrapPanel DockPanel.Dock="Top" Margin="20 0">
                         <Button x:Name="Button_UpLoadFile" Content="上传新文件"
                                 DockPanel.Dock="Top" Margin="10"
                                 Click="Button_UpLoadFile_Click" />
@@ -72,7 +72,7 @@
                                 Click="Button_CancelFile_Click" />
                     </WrapPanel>
 
-                    <WrapPanel DockPanel.Dock="Top">
+                    <WrapPanel DockPanel.Dock="Top" Margin="20 0">
                         <BaseWPFControl:ConfigControl Header="语速：" Margin="5">
                             <BaseWPFControl:NumericBox DockPanel.Dock="Top" MinValue="-10" MaxValue="10" Interval="1"
                                                        Value="{Binding SpeechRate}" ValueChanged="NumericBox_ValueChanged" />
@@ -86,7 +86,7 @@
                                 Click="Button_ReadFrom_Click" />
                     </WrapPanel>
 
-                    <ListBox ItemsSource="{Binding TxtFileNameList}"
+                    <ListBox ItemsSource="{Binding TxtFileNameList}" Margin="10"
                              SelectedValue="{Binding LastFileID, Converter={StaticResource GuidConverter}}"
                              SelectionChanged="ListBox_SelectionChanged">
                         <ListBox.ItemTemplate>

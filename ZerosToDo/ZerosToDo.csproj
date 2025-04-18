@@ -12,6 +12,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="ExternalDll\BaseTool.pdb" />
+    <None Remove="ExternalDll\BaseWPFControl.deps.json" />
+    <None Remove="ExternalDll\BaseWPFControl.pdb" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="ZerosToDo.ico" />
   </ItemGroup>
 
