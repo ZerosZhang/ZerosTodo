@@ -23,7 +23,7 @@ public static class AutoScreenShot
     /// </summary>
     public static void DoLoopScreenShotAction()
     {
-        if (ScreenShotTask is null) { return; }
+        if (ScreenShotTask is not null) { return; }
 
         ScreenShotTask = Task.Run(async () =>
         {
