@@ -11,41 +11,38 @@ public partial class SoftwareSetting : ObservableObject
     /*******************************************************************************************************/
 
     [ObservableProperty]
-    private string m_AppID = string.Empty;
-
+    public partial string AppID { get; set; } = string.Empty;
     [ObservableProperty]
-    private string m_AppSecret = string.Empty;
-
+    public partial string AppSecret { get; set; } = string.Empty;
     [ObservableProperty]
-    private string m_AppToken = string.Empty;
-
+    public partial string AppToken { get; set; } = string.Empty;
     [ObservableProperty]
-    private string m_DataBaseID = string.Empty;
+    public partial string DataBaseID { get; set; } = string.Empty;
 
     /// <summary>
     /// 上次Todo窗口打开的位置
     /// </summary>
     [ObservableProperty]
-    private int m_LastLeft = 0;
+    public partial int LastLeft { get; set; } = 0;
 
     /// <summary>
     /// 上次Todo窗口打开的位置
     /// </summary>
     [ObservableProperty]
-    private int m_LastTop = 0;
+    public partial int LastTop { get; set; } = 0;
 
     /*******************************************************************************************************/
     /// <summary>
     /// 保存截图文件的位置
     /// </summary>
     [ObservableProperty]
-    private string m_DirectoryOnSaveLogImage = Path.Combine(BaseDefine.DirectoryPathOnSaveFile, "LogImage");
+    public partial string DirectoryOnSaveLogImage { get; set; } = Path.Combine(BaseDefine.DirectoryPathOnSaveFile, "LogImage");
 
     /// <summary>
     /// 保留图片的时间
     /// </summary>
     [ObservableProperty]
-    private int m_TimeOnSaveLogImage = 90;
+    public partial int TimeOnSaveLogImage { get; set; } = 90;
 
     /*******************************************************************************************************/
 
@@ -53,25 +50,25 @@ public partial class SoftwareSetting : ObservableObject
     /// 朗读的语速
     /// </summary>
     [ObservableProperty]
-    private int m_SpeechRate = 0;
+    public partial int SpeechRate { get; set; } = 0;
 
     /// <summary>
     /// 保存文件的位置
     /// </summary>
     [ObservableProperty]
-    private string m_DirectoryOnSaveTxtFile = Path.Combine(BaseDefine.DirectoryPathOnSaveFile, "TxTFile");
+    public partial string DirectoryOnSaveTxtFile { get; set; } = Path.Combine(BaseDefine.DirectoryPathOnSaveFile, "TxTFile");
 
     /// <summary>
     /// 文件列表
     /// </summary>
     [ObservableProperty]
-    private ObservableCollection<FileMetaData> m_TxtFileNameList = [];
+    public partial ObservableCollection<FileMetaData> TxtFileNameList { get; set; } = [];
 
     /// <summary>
     /// 上一次朗读文件的ID
     /// </summary>
     [ObservableProperty]
-    private Guid? m_LastFileID = null;
+    public partial Guid? LastFileID { get; set; } = null;
 }
 
 

@@ -8,23 +8,18 @@
         xmlns:BaseWPFControl ="https://BaseWPFControl"
         WindowState="Normal" WindowStyle="None"
         MouseMove="Window_MouseMove" MouseDoubleClick="Window_MouseDoubleClick"
-        Title="SuspensionWindow" Height="450" Width="300" ShowInTaskbar="False"
+        Title="SuspensionWindow" SizeToContent="Width" Height="400" ShowInTaskbar="False"
         AllowsTransparency="True" Background="{x:Null}">
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/BaseWPFControl;component/Themes/Generic.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
-            <ZerosToDo:BackgroundConverter x:Key="BackgroundConverter" />
-            <ZerosToDo:IsCheckedConverter x:Key="IsCheckedConverter" />
-        </ResourceDictionary>
+        <ZerosToDo:BackgroundConverter x:Key="BackgroundConverter" />
+        <ZerosToDo:IsCheckedConverter x:Key="IsCheckedConverter" />
     </Window.Resources>
     <Border Background="AliceBlue" Margin="5" CornerRadius="12">
-        <ListBox x:Name="ListBox_TodoList" BaseWPFControl:ControlProperty.Header="待办事项" ItemsSource="{Binding}" IsHitTestVisible="False">
+        <ListBox x:Name="ListBox_TodoList" BaseWPFControl:ControlProperty.Header="待办事项"
+                 ItemsSource="{Binding}" IsHitTestVisible="False">
             <ListBox.ItemTemplate>
                 <DataTemplate DataType="Tools:TodoInfo">
-                    <Border CornerRadius="5" Margin="0" Width="240" Padding="3" >
+                    <Border CornerRadius="5" Margin="0" Width="220" Padding="3" >
                         <TextBlock Text="{Binding Title}"
                                    FontFamily="{StaticResource DefaultFontFamily}" FontSize="20"
                                    Foreground="{Binding Converter={StaticResource BackgroundConverter}}" />

@@ -5,18 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:BaseWPFControl ="https://BaseWPFControl"
         xmlns:ZerosToDo="clr-namespace:ZerosToDo"
-        d:DataContext="{d:DesignInstance ZerosToDo:SoftwareSetting}"
+        d:DataContext="{d:DesignInstance ZerosToDo:SoftwareSetting, IsDesignTimeCreatable=True}"
         Closing="Window_Closing"
         Title="设置界面" Height="450" Width="800">
     <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/BaseWPFControl;component/Themes/Generic.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
-            <ZerosToDo:GuidConverter x:Key="GuidConverter" />
-
-        </ResourceDictionary>
+        <ZerosToDo:GuidConverter x:Key="GuidConverter" />
     </Window.Resources>
     <BaseWPFControl:DialogContainer>
         <TabControl>
@@ -24,13 +17,13 @@
                 <GroupBox Header="Wolai 凭证">
                     <BaseWPFControl:SimplePanel>
                         <StackPanel Margin="20 0">
-                            <BaseWPFControl:ConfigControl ConfigName="AppID" LeftWidth="120">
+                            <BaseWPFControl:ConfigControl Header="AppID" LeftWidth="120">
                                 <TextBox Width="500" Text="{Binding AppID}" />
                             </BaseWPFControl:ConfigControl>
-                            <BaseWPFControl:ConfigControl ConfigName="AppSecret" LeftWidth="120">
+                            <BaseWPFControl:ConfigControl Header="AppSecret" LeftWidth="120">
                                 <TextBox Width="500" Text="{Binding AppSecret}" />
                             </BaseWPFControl:ConfigControl>
-                            <BaseWPFControl:ConfigControl ConfigName="DataBaseID" LeftWidth="120">
+                            <BaseWPFControl:ConfigControl Header="DataBaseID" LeftWidth="120">
                                 <TextBox Width="500" Text="{Binding DataBaseID}" />
                             </BaseWPFControl:ConfigControl>
                             <WrapPanel>
@@ -47,12 +40,12 @@
             <TabItem Header="日志图片">
                 <GroupBox Header="记录屏幕功能">
                     <StackPanel Margin="20 0">
-                        <BaseWPFControl:ConfigControl ConfigName="保存天数" LeftWidth="120">
+                        <BaseWPFControl:ConfigControl Header="保存天数" LeftWidth="120">
                             <TextBox Width="100" Text="{Binding TimeOnSaveLogImage}" />
                         </BaseWPFControl:ConfigControl>
 
-                        <BaseWPFControl:ConfigControl ConfigName="图片保存路径" LeftWidth="120">
-                            <BaseWPFControl:SelectFolderBlock SelectedPath="{Binding DirectoryOnSaveLogImage}" Width="300" />
+                        <BaseWPFControl:ConfigControl Header="图片保存路径" LeftWidth="120">
+                            <BaseWPFControl:SelectFolderBox Text="{Binding DirectoryOnSaveLogImage}" Width="300" />
                         </BaseWPFControl:ConfigControl>
                     </StackPanel>
                 </GroupBox>
@@ -80,20 +73,18 @@
                     </WrapPanel>
 
                     <WrapPanel DockPanel.Dock="Top">
-                        <BaseWPFControl:ConfigControl ConfigName="语速：" Margin="5">
+                        <BaseWPFControl:ConfigControl Header="语速：" Margin="5">
                             <BaseWPFControl:NumericBox DockPanel.Dock="Top" MinValue="-10" MaxValue="10" Interval="1"
                                                        Value="{Binding SpeechRate}" ValueChanged="NumericBox_ValueChanged" />
                         </BaseWPFControl:ConfigControl>
 
-                        <BaseWPFControl:ConfigControl ConfigName="从此处开始读：" Margin="5">
+                        <BaseWPFControl:ConfigControl Header="从此处开始读：" Margin="5">
                             <TextBox x:Name="TextBox_ReadFrom" Width="200" />
                         </BaseWPFControl:ConfigControl>
 
                         <Button x:Name="Button_ReadFrom" Content="跳转" Margin="10"
                                 Click="Button_ReadFrom_Click" />
                     </WrapPanel>
-
-
 
                     <ListBox ItemsSource="{Binding TxtFileNameList}"
                              SelectedValue="{Binding LastFileID, Converter={StaticResource GuidConverter}}"
